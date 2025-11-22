@@ -5,15 +5,15 @@ export const setupSession = (res, session) => {
 
   res.cookie("sessionId", session._id.toString(), {
     httpOnly: true,
-    sameSite: "none", // обязательно для кросс-домена
-    secure: process.env.NODE_ENV === "production", // true на проде
+    sameSite: isProd ? "none" : "lax",
+    secure: isProd,
     maxAge: ONE_DAY,
   });
 
   res.cookie("refreshToken", session.refreshToken, {
     httpOnly: true,
-    sameSite: "none",
-    secure: process.env.NODE_ENV === "production",
+    sameSite: isProd ? "none" : "lax",
+    secure: isProd,
     maxAge: ONE_DAY,
   });
 };
