@@ -3,7 +3,7 @@ import express from "express";
 import pino from "pino-http";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-
+import { getEnvVar } from "./utils/getEnvVar.js";
 import router from "./routers/index.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { notFoundHandler } from "./middlewares/notFoundHandler.js";
@@ -17,27 +17,28 @@ export const setupServer = () => {
 
   app.use(cookieParser());
 
-  app.use(
-    cors({
-      origin: function (origin, callback) {
-        const allowedOrigins = [
-          "http://localhost:3000",
-          "https://notehub-backend-rj4e.onrender.com",
-        ];
+  const corsOptions = {
+    origin: function (origin, callback) {
+      const allowedOrigins = [
+        "http://localhost:3000",
+        "https://wise-note-nu.vercel.app",
+      ];
 
-        if (!origin) return callback(null, true);
+      if (!origin) return callback(null, true);
 
-        if (allowedOrigins.includes(origin)) {
-          return callback(null, true);
-        } else {
-          console.log("CORS blocked for origin:", origin);
-          return callback(new Error("Not allowed by CORS"), false);
-        }
-      },
-      credentials: true,
-      methods: ["GET", "POST", "PUT", "DELETE"],
-    })
-  );
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        console.log("CORS blocked for origin:", origin);
+        return callback(new Error("Not allowed by CORS"), false);
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  };
+
+  app.options("*", cors(corsOptions));
+  app.use(cors(corsOptions));
 
   app.use(
     pino({
@@ -55,7 +56,10 @@ export const setupServer = () => {
     })
   );
 
-  app.options("*", cors(corsOptions));
+  app.use((req, res, next) => {
+    console.log("Cookies received:", req.cookies); // <- здесь увидишь куки
+    next();
+  });
 
   app.use(router);
 

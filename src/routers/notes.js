@@ -1,35 +1,35 @@
-import { Router } from 'express';
+import { Router } from "express";
 import {
   getNotesController,
   getNoteByIdController,
   createNoteController,
   patchNoteController,
   deleteNoteController,
-} from '../controllers/notes.js';
-import { ctrlWrapper } from '../utils/ctrlWrapper.js';
-import { validateBody } from '../middlewares/validateBody.js';
-import { isValidId } from '../middlewares/isValidId.js';
-import { addNoteSchema, updateNoteSchema } from '../validation/notes.js';
-import { authenticate } from '../middlewares/authenticate.js';
+} from "../controllers/notes.js";
+import { ctrlWrapper } from "../utils/ctrlWrapper.js";
+import { validateBody } from "../middlewares/validateBody.js";
+import { isValidId } from "../middlewares/isValidId.js";
+import { addNoteSchema, updateNoteSchema } from "../validation/notes.js";
+import { authenticate } from "../middlewares/authenticate.js";
 
 const router = Router();
 router.use(authenticate);
 
-router.get('/', ctrlWrapper(getNotesController));
-router.get('/:noteId', isValidId, ctrlWrapper(getNoteByIdController));
+router.get("/notes", ctrlWrapper(getNotesController));
+router.get("/:noteId", isValidId, ctrlWrapper(getNoteByIdController));
 router.post(
-  '/',
+  "/",
   validateBody(addNoteSchema),
-  ctrlWrapper(createNoteController),
+  ctrlWrapper(createNoteController)
 );
 
 router.patch(
-  '/:noteId',
+  "/:noteId",
   isValidId,
   validateBody(updateNoteSchema),
-  ctrlWrapper(patchNoteController),
+  ctrlWrapper(patchNoteController)
 );
 
-router.delete('/:noteId', isValidId, ctrlWrapper(deleteNoteController));
+router.delete("/:noteId", isValidId, ctrlWrapper(deleteNoteController));
 
 export default router;
