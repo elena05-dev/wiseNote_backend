@@ -15,7 +15,7 @@ import { authenticate } from "../middlewares/authenticate.js";
 const router = Router();
 router.use(authenticate);
 
-router.get("/notes", ctrlWrapper(getNotesController));
+router.get("/", ctrlWrapper(getNotesController));
 router.get("/:noteId", isValidId, ctrlWrapper(getNoteByIdController));
 router.post(
   "/",

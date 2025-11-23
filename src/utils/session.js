@@ -2,18 +2,19 @@ import { ONE_DAY } from "../constants/index.js";
 
 export const setupSession = (res, session) => {
   console.log("Setting session:", session);
+  const isProduction = process.env.NODE_ENV === "production";
 
   res.cookie("sessionId", session._id.toString(), {
     httpOnly: true,
-    sameSite: "none", // для кросс-домена
-    secure: process.env.NODE_ENV === "production", // true на проде
+    secure: isProduction, // должно быть true на Render (https)
+    sameSite: isProduction ? "none" : "lax",
     maxAge: ONE_DAY,
   });
 
   res.cookie("refreshToken", session.refreshToken, {
     httpOnly: true,
-    sameSite: "none",
-    secure: process.env.NODE_ENV === "production",
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
     maxAge: ONE_DAY,
   });
 };
