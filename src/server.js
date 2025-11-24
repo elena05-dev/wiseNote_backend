@@ -37,7 +37,7 @@ export const setupServer = () => {
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   };
 
-  app.options("*", cors(corsOptions));
+  app.options("/api/*", cors(corsOptions));
   app.use(cors(corsOptions));
 
   app.use(
