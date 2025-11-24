@@ -37,7 +37,7 @@ export const setupServer = () => {
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   };
 
-  app.options("/api/*", cors(corsOptions));
+  app.options("*", cors(corsOptions));
   app.use(cors(corsOptions));
 
   app.use(
@@ -48,6 +48,8 @@ export const setupServer = () => {
           : undefined,
     })
   );
+
+  app.set("trust proxy", 1);
 
   app.use(
     express.json({
