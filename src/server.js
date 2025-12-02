@@ -23,6 +23,7 @@ export const setupServer = () => {
       const allowedOrigins = [
         "http://localhost:3000",
         "https://wise-note-nu.vercel.app",
+        "https://notehub-frontend.vercel.app",
       ];
 
       if (!origin) return callback(null, true);
@@ -44,17 +45,17 @@ export const setupServer = () => {
   // express-session
   app.use(
     session({
-      secret: "your_secret_key", // можно взять из .env
+      secret: process.env.SESSION_SECRET || "default_secret",
       resave: false,
       saveUninitialized: false,
       cookie: {
         httpOnly: true,
-        sameSite: "lax", // важно для localhost
-        secure: false, // false для dev (http)
+        sameSite: "none", // для кросс-домена через HTTPS
+        secure: true, // обязательно true на проде (HTTPS)
+        maxAge: 1000 * 60 * 60 * 24, // 1 день
       },
     })
   );
-
   app.use(
     pino({
       transport:
