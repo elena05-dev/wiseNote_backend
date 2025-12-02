@@ -3,6 +3,7 @@ import express from "express";
 import pino from "pino-http";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import session from "express-session";
 import { getEnvVar } from "./utils/getEnvVar.js";
 import router from "./routers/index.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
@@ -39,6 +40,20 @@ export const setupServer = () => {
 
   app.options("*", cors(corsOptions));
   app.use(cors(corsOptions));
+
+  // express-session
+  app.use(
+    session({
+      secret: "your_secret_key", // можно взять из .env
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        httpOnly: true,
+        sameSite: "lax", // важно для localhost
+        secure: false, // false для dev (http)
+      },
+    })
+  );
 
   app.use(
     pino({
