@@ -50,9 +50,9 @@ export const setupServer = () => {
       saveUninitialized: false,
       cookie: {
         httpOnly: true,
-        sameSite: "none", // для кросс-домена через HTTPS
-        secure: true, // обязательно true на проде (HTTPS)
-        maxAge: 1000 * 60 * 60 * 24, // 1 день
+        secure: true, // HTTPS обязательно
+        sameSite: "none", // кросс-домен
+        maxAge: 24 * 60 * 60 * 1000,
       },
     })
   );
