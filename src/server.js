@@ -11,7 +11,7 @@ import { notFoundHandler } from "./middlewares/notFoundHandler.js";
 
 dotenv.config();
 
-const PORT = Number(getEnvVar("PORT"));
+const PORT = Number(getEnvVar("PORT", "4000"));
 
 export const setupServer = () => {
   const app = express();
