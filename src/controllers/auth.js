@@ -10,17 +10,15 @@ import { getUserBySession } from "../services/auth.js";
 import { setupSession } from "../utils/session.js";
 
 export const registerUserController = async (req, res) => {
-  console.log("Register controller called");
-  console.log("📩 Incoming body:", req.body); // <---- ДОБАВЬ ЭТО
-
+ 
   try {
     const user = await registerUser(req.body);
-    console.log("User created:", user);
+  
     const session = await loginUser({
       email: req.body.email,
       password: req.body.password,
     });
-    console.log("Session created:", session);
+   
     setupSession(res, session);
 
     res.status(201).json({
@@ -86,8 +84,7 @@ export const getMeController = async (req, res) => {
 };
 
 export const refreshUserSessionController = async (req, res) => {
-  console.log("Cookies from client:", req.cookies);
-
+ 
   try {
     const { sessionId, refreshToken } = req.cookies;
 

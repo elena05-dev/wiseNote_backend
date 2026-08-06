@@ -1,31 +1,25 @@
-import { Note } from '../db/models/Note.js';
-import { SORT_ORDER } from '../constants/index.js';
-import { calculatePaginationData } from '../utils/calculatePaginationData.js';
-import mongoose from 'mongoose';
+import { Note } from "../db/models/Note.js";
+import { SORT_ORDER } from "../constants/index.js";
+import { calculatePaginationData } from "../utils/calculatePaginationData.js";
+import mongoose from "mongoose";
 
 export const getAllNotes = async ({
   page = 1,
   perPage = 10,
-  sortOrder = SORT_ORDER.ASC,
-  sortBy = '_id',
+  sortOrder = SORT_ORDER.DESC,
+  sortBy = "createdAt",
   filter = {},
 }) => {
   const limit = perPage;
   const skip = (page - 1) * perPage;
-
   const query = filter;
-
-  console.log('Final Mongo query:', JSON.stringify(query, null, 2));
-
   const notesQuery = Note.find(query);
   const notesCount = await Note.countDocuments(query);
-
   const notes = await notesQuery
     .skip(skip)
     .limit(limit)
     .sort({ [sortBy]: sortOrder })
     .exec();
-
   const paginationData = calculatePaginationData(notesCount, perPage, page);
 
   return {
@@ -41,7 +35,7 @@ export const getNoteById = async (noteId, userId) => {
     _id: noteId,
     user: userId,
   });
-  console.log('Fetched note:', note);
+
   return note;
 };
 

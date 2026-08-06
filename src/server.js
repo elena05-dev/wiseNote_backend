@@ -31,7 +31,6 @@ export const setupServer = () => {
       if (allowedOrigins.includes(origin)) {
         return callback(null, true);
       } else {
-        console.log("CORS blocked for origin:", origin);
         return callback(new Error("Not allowed by CORS"), false);
       }
     },
@@ -42,7 +41,6 @@ export const setupServer = () => {
   app.options("*", cors(corsOptions));
   app.use(cors(corsOptions));
 
-  // express-session
   app.use(
     session({
       secret: process.env.SESSION_SECRET || "default_secret",
@@ -50,11 +48,11 @@ export const setupServer = () => {
       saveUninitialized: false,
       cookie: {
         httpOnly: true,
-        secure: true, // HTTPS обязательно
-        sameSite: "none", // кросс-домен
+        secure: true,
+        sameSite: "none",
         maxAge: 24 * 60 * 60 * 1000,
       },
-    })
+    }),
   );
   app.use(
     pino({
@@ -62,7 +60,7 @@ export const setupServer = () => {
         process.env.NODE_ENV !== "production"
           ? { target: "pino-pretty", options: { colorize: true } }
           : undefined,
-    })
+    }),
   );
 
   app.set("trust proxy", 1);
@@ -71,11 +69,10 @@ export const setupServer = () => {
     express.json({
       type: ["application/json", "application/vnd.api+json"],
       limit: "100kb",
-    })
+    }),
   );
 
   app.use((req, res, next) => {
-    console.log("Cookies received:", req.cookies); // <- здесь увидишь куки
     next();
   });
 
@@ -83,13 +80,6 @@ export const setupServer = () => {
 
   app.use("/", notFoundHandler);
   app.use(errorHandler);
-
-  console.log("CORS_ORIGIN:", process.env.CORS_ORIGIN);
-  console.log(
-    "JWT_SECRET:",
-    process.env.JWT_SECRET ? "✅ loaded" : "❌ missing"
-  );
-  console.log("PORT:", process.env.PORT);
 
   app.listen(PORT, () => {
     console.log(`✅ Server is running on port ${PORT}`);

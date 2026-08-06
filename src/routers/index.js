@@ -9,6 +9,5 @@ router.use("/api/auth", authRouter);
 router.use("/api/notes", notesRouter);
 router.use("/api/users", usersRouter);
 
-console.log("📡 Routes in router:", Object.keys(router.stack));
 
 export default router;
