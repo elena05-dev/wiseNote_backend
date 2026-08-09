@@ -83,10 +83,16 @@ export const refreshUsersSession = async ({ sessionId, refreshToken }) => {
 };
 
 export const getUserBySession = async (sessionId) => {
+  console.log("GET USER BY SESSION:", sessionId);
+
   const session = await SessionsCollection.findById(sessionId);
+
+  console.log("FOUND SESSION:", session);
+
   if (!session) throw createHttpError(401, "Invalid session");
 
   const user = await UsersCollection.findById(session.userId);
+
   if (!user) throw createHttpError(401, "User not found for this session");
 
   return user;
