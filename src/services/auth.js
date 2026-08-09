@@ -35,7 +35,7 @@ export const loginUser = async (payload) => {
     accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
     refreshTokenValidUntil: new Date(Date.now() + ONE_DAY),
   });
-
+  console.log("LOGIN CREATED SESSION:", newSession._id.toString());
   return newSession;
 };
 
