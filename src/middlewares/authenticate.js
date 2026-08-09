@@ -10,6 +10,15 @@ export const authenticate = async (req, res, next) => {
       throw createHttpError(401, "Not authenticated");
     }
 
+    console.log("AUTH COOKIES:", {
+      sessionId,
+      refreshToken,
+    });
+
+    const sessionById = await SessionsCollection.findById(sessionId);
+
+    console.log("SESSION BY ID:", sessionById);
+
     const session = await SessionsCollection.findOne({
       _id: sessionId,
       refreshToken,
