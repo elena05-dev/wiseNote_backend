@@ -61,13 +61,7 @@ export const patchNote = async (noteId, updateData, userId) => {
 };
 
 export const deleteNote = async (noteId, userId) => {
-  console.log("DELETE NOTE ID:", noteId);
-  console.log("DELETE USER ID:", userId);
-
   const note = await Note.findById(noteId);
-
-  console.log("NOTE BY ID:", note);
-  console.log("NOTE USER:", note?.user);
 
   return Note.findOneAndDelete({
     _id: noteId,

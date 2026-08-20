@@ -17,8 +17,7 @@ export const getNotesController = async (req, res, next) => {
 
     const filter = parseFilterParams(req.query, req.user._id);
 
-    console.log("REQ QUERY:", req.query);
-    console.log("FILTER:", filter);
+    
     const {
       data: notes,
       totalItems,
