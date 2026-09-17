@@ -35,7 +35,7 @@ export const loginUser = async (payload) => {
     accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
     refreshTokenValidUntil: new Date(Date.now() + ONE_DAY),
   });
-  console.log("LOGIN CREATED SESSION:", newSession._id.toString());
+
   return newSession;
 };
 
@@ -83,11 +83,7 @@ export const refreshUsersSession = async ({ sessionId, refreshToken }) => {
 };
 
 export const getUserBySession = async (sessionId) => {
-  console.log("GET USER BY SESSION:", sessionId);
-
   const session = await SessionsCollection.findById(sessionId);
-
-  console.log("FOUND SESSION:", session);
 
   if (!session) throw createHttpError(401, "Invalid session");
 
